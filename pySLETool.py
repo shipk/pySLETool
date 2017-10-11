@@ -45,12 +45,10 @@ class SLETool(Frame):
         showinfo("Comma count", 'Comma count is ' + str(cnt))
     def onMultiply(self):
         s = self.st.get('1.0', END+'-1c')
-        print("s=%s" % s)
         s1 = ""
         for i in range(49,96+1):
             sa = re.sub('48', str(i), s)
             s1 = s1 + sa
-        print("s1=%s" % s1)
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onClear(self):
