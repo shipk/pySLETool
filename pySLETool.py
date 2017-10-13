@@ -66,11 +66,10 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onBlock(self):
-        s = self.st.get('1.0', END+'-1c')
-        s1 = s
+        s1 = self.st.get('1.0', END+'-1c')
         for i in range(1,48+1):
-            # "xx,"
-            ma = re.compile(r'(.*)([^0-9])('+str(i)+'([, \)\-])(.*)', re.DOTALL)
+            # "xx,", "xx ", "xx)", "xx-"
+            ma = re.compile(r'(.*)([^0-9])('+str(i)+')([, \)\-\n])(.*)', re.DOTALL)
             while True:
                 mo = ma.match(s1)
                 if mo is None: break
