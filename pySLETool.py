@@ -70,29 +70,13 @@ class SLETool(Frame):
         s1 = s
         for i in range(1,48+1):
             # "xx,"
-            ma = re.compile(r'(.*)([^0-9])('+str(i)+',)(.*)', re.DOTALL)
+            ma = re.compile(r'(.*)([^0-9])('+str(i)+'([, \)\-])(.*)', re.DOTALL)
             while True:
                 mo = ma.match(s1)
                 if mo is None: break
                 g = mo.groups()
                 #print('s1=%s groups 0=%s 1=%s 2=%s 3=%s' % (s1, g[0], g[1], g[2], g[3]))
-                s1 = g[0] + g[1] + str(i+48) + ',' + g[3]
-            # "xx "
-            ma = re.compile(r'(.*)([^0-9])('+str(i)+' )(.*)', re.DOTALL)
-            while True:
-                mo = ma.match(s1)
-                if mo is None: break
-                g = mo.groups()
-                #print('s1=%s groups 0=%s 1=%s 2=%s 3=%s' % (s1, g[0], g[1], g[2], g[3]))
-                s1 = g[0] + g[1] + str(i+48) + ' ' + g[3]
-            # "xx)"
-            ma = re.compile(r'(.*)([^0-9])('+str(i)+'\))(.*)', re.DOTALL)
-            while True:
-                mo = ma.match(s1)
-                if mo is None: break
-                g = mo.groups()
-                #print('s1=%s groups 0=%s 1=%s 2=%s 3=%s' % (s1, g[0], g[1], g[2], g[3]))
-                s1 = g[0] + g[1] + str(i+48) + ')' + g[3]
+                s1 = g[0] + g[1] + str(i+48) + g[3] +g[4]
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onClear(self):
