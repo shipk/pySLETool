@@ -29,14 +29,17 @@ class SLETool(Frame):
         self.btnCommaCount = Button(frmTop, text='Comma count',  command=self.onCommaCount)
         self.btnCommaCount.pack(side=LEFT, padx=5, pady=5)
 
-        self.btnMultiply = Button(frmTop, text='Multiply from 48 to 49..96',  command=self.onMultiply)
-        self.btnMultiply.pack(side=LEFT, padx=5, pady=5)
+        self.btnMultiply48to4996 = Button(frmTop, text='Multiply from 48 to 49..96',  command=self.onMultiply48to4996)
+        self.btnMultiply48to4996.pack(side=LEFT, padx=5, pady=5)
 
-        self.btnMultiply1 = Button(frmTop, text='Multiply from 48 to 1..96',  command=self.onMultiply1)
-        self.btnMultiply1.pack(side=LEFT, padx=5, pady=5)
+        self.btnMultiply48to0196 = Button(frmTop, text='Multiply from 48 to 1..96',  command=self.onMultiply48to0196)
+        self.btnMultiply48to0196.pack(side=LEFT, padx=5, pady=5)
 
-        self.btnBlock = Button(frmTop, text='Block from 1..48 to 49..96',  command=self.onBlock)
-        self.btnBlock.pack(side=LEFT, padx=5, pady=5)
+        self.btnBlock0148to4996 = Button(frmTop, text='Block from 1..48 to 49..96',  command=self.onBlock0148to4996)
+        self.btnBlock0148to4996.pack(side=LEFT, padx=5, pady=5)
+
+        self.btnBlock3340to4148 = Button(frmTop, text='Block from 33..40 to 41..48',  command=self.onBlock3340to4148)
+        self.btnBlock3340to4148.pack(side=LEFT, padx=5, pady=5)
 
         self.btnSplit = Button(frmTop, text='Split',  command=self.onSplit)
         self.btnSplit.pack(side=LEFT, padx=5, pady=5)
@@ -55,7 +58,7 @@ class SLETool(Frame):
             if c == ',':
                 cnt = cnt + 1
         showinfo("Comma count", 'Comma count is ' + str(cnt))
-    def onMultiply(self):
+    def onMultiply48to4996(self):
         s = self.st.get('1.0', END+'-1c')
         s1 = ""
         for i in range(49,96+1):
@@ -63,7 +66,7 @@ class SLETool(Frame):
             s1 = s1 + sa
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
-    def onMultiply1(self):
+    def onMultiply48to0196(self):
         s = self.st.get('1.0', END+'-1c')
         s1 = ""
         for i in range(1,96+1):
@@ -71,17 +74,30 @@ class SLETool(Frame):
             s1 = s1 + sa
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
-    def onBlock(self):
+    def onBlock0148to4996(self):
         s1 = self.st.get('1.0', END+'-1c')
         for i in range(1,48+1):
             # "xx,", "xx ", "xx)", "xx-"
-            ma = re.compile(r'(.*)([^0-9])('+str(i)+')([, \)\-\+\*\n\;])(.*)', re.DOTALL)
+            ma = re.compile(r'(.*)([^0-9])('+str(i)+')([^0-9])(.*)', re.DOTALL)
             while True:
                 mo = ma.match(s1)
                 if mo is None: break
                 g = mo.groups()
                 #print('s1=%s groups 0=%s 1=%s 2=%s 3=%s' % (s1, g[0], g[1], g[2], g[3]))
                 s1 = g[0] + g[1] + str(i+48) + g[3] +g[4]
+        self.st.insert(END, '===================================================\n')
+        self.st.insert(END, s1)
+    def onBlock3340to4148(self):
+        s1 = self.st.get('1.0', END+'-1c')
+        for i in range(33,40+1):
+            # "xx,", "xx ", "xx)", "xx-"
+            ma = re.compile(r'(.*)([^0-9])('+str(i)+')([^0-9])(.*)', re.DOTALL)
+            while True:
+                mo = ma.match(s1)
+                if mo is None: break
+                g = mo.groups()
+                #print('s1=%s groups 0=%s 1=%s 2=%s 3=%s' % (s1, g[0], g[1], g[2], g[3]))
+                s1 = g[0] + g[1] + str(i+8) + g[3] +g[4]
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onSplit(self):
