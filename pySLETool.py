@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 from tkinter.messagebox import *
 import re
+import os
 
 class StatusBar(Frame):
     def __init__(self, parent):
@@ -46,6 +47,9 @@ class SLETool(Frame):
 
         self.btnSubst = Button(frmTop, text='Subst',  command=self.onSubst)
         self.btnSubst.pack(side=LEFT, padx=5, pady=5)
+
+        self.btnScript = Button(frmTop, text='Script',  command=self.onScript)
+        self.btnScript.pack(side=LEFT, padx=5, pady=5)
 
         Button(frmTop, text='Clear',  command=self.onClear).pack(side=RIGHT, padx=5, pady=5)
         
@@ -131,6 +135,53 @@ class SLETool(Frame):
             s2 = s2 + '\n' + s1
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s2)
+    def onScript(self):
+        def t_dir(dname, lname):
+            def t_file(name):
+                s = ''
+                s = s + 'prompt\n'
+                s = s + 'prompt Exec ' + name + '\n'
+                s = s + 'prompt ===========================\n'
+                s = s + '@@' + server_name + '\\' + schema_name + '\\' + name + '\n'
+                return s
+            def t_ext(ext):
+                names = [fname for fname in os.listdir(dname) if (os.path.isfile(os.path.join(dname, fname)) and fname.endswith('.' + ext))]
+                s = ''
+                for x in names:
+                    s = s + t_file(x) + '\n'
+                return s
+            
+            s = ''
+            s = s + 'set define off\n'
+            s = s + 'spool ' + lname + '\n'
+            s = s + '\n'
+            s = s + t_ext('tab')
+            s = s + t_ext('vw')
+            s = s + t_ext('mv')
+            s = s + t_ext('sql') # Тоже с view
+            s = s + t_ext('tps')
+            s = s + t_ext('trg')
+            s = s + t_ext('fnc')
+            s = s + t_ext('prc')
+            s = s + t_ext('pck')
+            s = s + 'prompt All done.\n'
+            s = s + '\n'
+            s = s + 'spool off\n'
+            s = s + '\n'
+            return s
+
+        root_name = r'C:\Users\KSHIPKOV\Documents\SVN\HS\Materials\Source code\Oracle\48to96\Output'
+        s = ''
+        server_names = [sname for sname in os.listdir(root_name) if os.path.isdir(os.path.join(root_name, sname))] 
+        for server_name in server_names:
+            schema_names = [sname for sname in os.listdir(os.path.join(root_name, server_name)) if os.path.isdir(os.path.join(root_name, server_name, sname))] 
+            for schema_name in schema_names:
+                s = s + 'file: ' + server_name + '_' + schema_name + '.sql\n'
+                lname = server_name + '_' + schema_name + '.log'
+                dname = os.path.join(root_name, server_name, schema_name)
+                s = s + t_dir(dname, lname)
+
+        self.st.insert(END, s)
     def onSubst1(self):
         s = self.st.get('1.0', END+'-1c')
         sr = ''
