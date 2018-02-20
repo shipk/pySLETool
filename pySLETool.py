@@ -56,6 +56,9 @@ class SLETool(Frame):
         self.st = ScrolledText(frmMiddle, font=('courier', 9, 'normal'))
         self.st.pack(side=TOP, fill=BOTH, expand=YES)
     def onCommaCount(self):
+        """
+        Подсчёт количества запятых в тексте
+        """
         s = self.st.get('1.0', END)
         cnt = 0
         for c in s:
@@ -63,6 +66,9 @@ class SLETool(Frame):
                 cnt = cnt + 1
         showinfo("Comma count", 'Comma count is ' + str(cnt))
     def onMultiply48to4996(self):
+        """
+        Умножение блока текста с номером 48 до текста с номерами от 49 до 96
+        """
         s = self.st.get('1.0', END+'-1c')
         s1 = ""
         for i in range(49,96+1):
@@ -71,6 +77,9 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onMultiply48to0196(self):
+        """
+        Умножение блока текста с номером 48 до текста с номерами от 1 до 96
+        """
         s = self.st.get('1.0', END+'-1c')
         s1 = ""
         for i in range(1,96+1):
@@ -79,6 +88,9 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onBlock0148to4996(self):
+        """
+        Замена в блоке текста номеров с 1 по 48 на номера с 49 до 96
+        """
         s1 = self.st.get('1.0', END+'-1c')
         for i in range(1,48+1):
             # "xx,", "xx ", "xx)", "xx-"
@@ -92,6 +104,9 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onBlock3340to4148(self):
+        """
+        Замена в блоке текста номеров с 33 по 40 на номера с 41 до 48
+        """
         s1 = self.st.get('1.0', END+'-1c')
         for i in range(33,40+1):
             # "xx,", "xx ", "xx)", "xx-"
@@ -105,6 +120,9 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s1)
     def onSplit(self):
+        """
+        Заготовка для разбиения длинной строки на строки по 5 позиций
+        """
         s = self.st.get('1.0', END+'-1c')
         ma = re.compile(r'^( *)(.*)')
         mo = ma.match(s)
@@ -129,6 +147,9 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s_ident + s_res)
     def onSubst(self):
+        """
+        Разбиение строки с разделителем ";" на отдельные строки
+        """
         s = self.st.get('1.0', END+'-1c')
         s2 = ''
         for s1 in s.split(r';'):
@@ -136,6 +157,9 @@ class SLETool(Frame):
         self.st.insert(END, '===================================================\n')
         self.st.insert(END, s2)
     def onScript(self):
+        """
+        Генерация SQLPLUS скрипта для наката на БД по каталогу с объектами (в рамках проекта по расширению услуг)
+        """
         def t_dir(dname, lname):
             def t_file(name):
                 s = ''
@@ -203,5 +227,5 @@ class SLETool(Frame):
 
 if __name__ == '__main__':
     root = Tk()
-    root.title("SLETool")
+    root.title("SLETool1")
     SLETool(root).mainloop()
